@@ -1,0 +1,7 @@
+<h1 class="text-8xl font-[Times New Roman]">Register form!</h1>
+
+<form class="text-center" method="post" action="{% url 'register' %}">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit form!</button>
+</form>

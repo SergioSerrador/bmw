@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ person.name }} - BMW{% endblock title %}
+
+{% block content %}
+<div class="text-black py-12 flex justify-center">
+  <div class="w-full max-w-lg text-center">
+    <h1 class="text-3xl font-semibold text-black-800 mb-4">{{ person.name }}</h1>
+    <p class="mb-4">Fecha de nacimiento: {{ person.birth|date:"d/m/Y" }}</p>
+    <img src="{{ person.propic.url }}" />
+    <a href="{% url 'persons' %}" class="text-black-600 hover:underline">← Volver al listado</a>
+  </div>
+</div>
+{% endblock content %}

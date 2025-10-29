@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    BMW
+{% endblock title %}
+
+{% block content %}
+<div class="py-12 flex justify-center">
+  <div class="w-full max-w-lg text-center">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-4">Listado Personas</h1>
+    <ul class="text-black mx-auto list-disc list-inside space-y-1">
+      {% for person in persons %}
+        <li>
+          <a class="text-blue-600 hover:underline" href="{% url 'person_detail' slug=person.slug %}">{{ person.name }}</a>
+          - {{ person.birth|date:"d/m/Y" }}
+        </li>
+      {% empty %}
+        <li>No hay personas registradas.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock content %}
