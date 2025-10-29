@@ -1,26 +1,31 @@
-{% load static tailwind_tags %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <title>
-        {% block title %}
-            BMW España
-        {% endblock title %}
-    </title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% tailwind_css %}
-</head>
+    {% load static tailwind_tags %}
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <title>
+            {% block title %}
+                BMW España
+            {% endblock title %}
+        </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% tailwind_css %}
+    </head>
 
-<body class="text-white font-serif leading-normal tracking-normal">
-    <nav class="p-6 bg-blue-600 flex space-x-4">
-        <img class="w-9" src="{% static 'images/image.png' %}" alt="Logo">
-        <a class="hover:underline" href="{% url 'home' %}">Inicio</a>
-        <a class="hover:underline" href="{% url 'cars' %}">Modelos</a>
-    </nav>
-    <main>  
-        {% block content %}{% endblock %}
-    </main>
-</body>
-</html>
+    <body class="text-white font-serif leading-normal tracking-normal">
+        <nav class="p-6 bg-blue-600 flex space-x-4">
+            <img class="w-9" src="{% static 'images/image.png' %}" alt="Logo">
+            <a class="hover:underline" href="{% url 'home' %}">Inicio</a>
+            <a class="hover:underline" href="{% url 'cars' %}">Modelos</a>
+            <span>Hola, {{ user.username }} 👋</span>
+            <form action="{% url 'users:logout' %}" method="post">
+                {% csrf_token %}
+                <button class="hover:underline">Logout</button>
+            </form>
+        </nav>
+        <main>  
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+    </html>
