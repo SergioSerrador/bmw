@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-gray-800">
+    <h1 class="text-3xl text-center font-semibold mb-4">Lista coches BMW</h1>
+    
+    {% if user.is_authenticated %}
+    <form class="text-center" action="{% url 'cars:list_products' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }} 
+        <button class="text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Publicar coche</button>
+    </form>
+
+    <ul class="mt-4">
+        {% for product in products %}
+        <li class="border-b py-2> 
+            <strong class="font-bold">{{ product.name }}</strong> - {{ product.category }} - {{ product.price }} €
+            <p class="text-sm mt-1">{{ product.description }}</p>
+            <small class="text-xs italic">Vendedor: {{ product.user.username}}</small>
+        </li>
+        {% empty %}
+        <li>No hay coches disponibles.</li>
+        {% endfor %}
+    </ul>
+    
+    {% else %}
+    <p class="text-center>Por favor, <a class="underline" href="{% url 'users:login' %}">inicia sesión</a> para ver y publicar coches.</p>
+    {% endif %}
+</div>
+
+{% endblock content %}

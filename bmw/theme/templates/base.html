@@ -17,12 +17,26 @@
         <nav class="p-6 bg-blue-600 flex space-x-4">
             <img class="w-9" src="{% static 'images/image.png' %}" alt="Logo">
             <a class="hover:underline" href="{% url 'home' %}">Inicio</a>
-            <a class="hover:underline" href="{% url 'cars' %}">Modelos</a>
-            <span>Hola, {{ user.username }} 👋</span>
-            <form action="{% url 'users:logout' %}" method="post">
+            <a class="hover:underline" href="{% url 'cars:cars' %}">Modelos</a>
+            {% if user.is_authenticated %}
+            <div class="text-left">
+                <a class="mr-4" href="{% url 'cars:list_products' %}">Coches</a>
+            </div>
+            {% else %}
+            <div class="text-right">
+                <a class="mr-4" href="{% url 'users:login' %}"></a>
+            </div>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <a>Hola, {{ user.username }}</a>
+            <form class="flex items-end" action="{% url 'users:logout' %}" method="post">
                 {% csrf_token %}
                 <button class="hover:underline">Logout</button>
             </form>
+            {% else %}
+            <a href="{% url 'users:login' %}" class="hover:underline">Login</a>
+            <a href="{% url 'users:register' %}" class="hover:underline">Register</a>
+            {% endif %}
         </nav>
         <main>  
             {% block content %}{% endblock %}

@@ -1,7 +1,16 @@
-<h1 class="text-8xl font-[Times New Roman]">Login form!</h1>
+{% extends 'base.html' %}
 
-<form action="{% url 'users:login' %}" class="text-center" method="post">
+{% load static %}
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+<h1 class="text-8xl font-[Times New Roman]">Login form!</h1>
+<form class="text-black text-center" action="{% url 'users:login' %}" class="text-center" method="post">
     {% csrf_token %}
     {{ form }}
+    {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+    {% endif %}
     <button type="submit">Submit form!</button>
 </form>
+{% endblock content %}
