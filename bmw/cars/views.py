@@ -17,7 +17,7 @@ def person_detail(request, slug):
 def list_products(request):
     return render(request, 'list.html')
 
-@login_required(login_url='/login/')
+@login_required(login_url='/users/login/')
 def product_list_view(request):
     product_list = Product.objects.all()[:20]
     
