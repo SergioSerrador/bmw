@@ -26,6 +26,7 @@ urlpatterns = [
     path('cars/', include('cars.urls')),
     path('users/', include('users.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
+    path('games/', include('games.urls')),  
 ]
 
 urlpatterns += static(settings.MEDIA_URL, 
