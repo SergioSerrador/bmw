@@ -3,32 +3,59 @@
 <div class="text-center mt-8">
 
     <h1 class="text-2xl font-bold mb-2 text-black">Partida: {{ game.room_name }}</h1>
-    <p class="mb-6 text-black">Jugador actual: {{ game.active_player }}</p>
 
-    <form method="POST" class="inline-block">
+    <p id="player-display" class="mb-6 text-black">Jugador actual: {{ game.active_player }}</p>
+
+    <div class="grid grid-cols-3 gap-2 w-48 mx-auto">
+    {% for i in squares %}
+        <button 
+            onclick="sendMove('{{ i }}')"
+            class="border-2 border-gray-800 w-16 h-16 flex items-center justify-center text-2xl font-bold bg-white text-black hover:bg-gray-200"
+            id="sq{{ i }}">
+        </button>
+    {% endfor %}
+    </div>
+
+
+    <p id="winner-text" class="text-green-600 font-bold mt-4">{% if game.over %}Ganador: {{ game.winner }}{% endif %}</p>
+
+    <form method="POST" action="{% url 'games:delete_game' game.room_name %}" class="mt-4">
         {% csrf_token %}
-        <div class="grid grid-cols-3 gap-2 w-48 mx-auto">
-            {% for i in board %}
-                <button 
-                    type="submit"
-                    name="square" 
-                    value="{{ forloop.counter0 }}" 
-                    class="border-2 border-gray-800 w-16 h-16 flex items-center justify-center text-2xl font-bold bg-white text-black hover:bg-gray-200">
-                    {{ i }}
-                </button>
-            {% endfor %}
-        </div>
+        <button type="submit" class="bg-red-400 text-white px-3 py-1 rounded">
+            Eliminar partida
+        </button>
     </form>
 
-    {% if game.over %}
-        <p class="text-green-600 font-bold mt-4">Ganador: {{ game.winner }}</p>
-        
-        <form method="POST" action="{% url 'games:delete_game' game.room_name %}" class="mt-4">
-          {% csrf_token %}
-          <button type="submit" class="bg-red-400 text-white px-3 py-1 rounded">
-            Eliminar partida
-          </button>
-        </form>
-    {% endif %}
 </div>
+
+<script>
+const room_id = "{{ game.room_name }}";
+const socket = new WebSocket('ws://' + window.location.host + '/ws/game/' + room_id + '/');
+
+socket.onopen = function() {
+    console.log("Conectado al socket");
+};
+
+socket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    updateBoard(data);
+};
+
+function sendMove(square) {
+    square = parseInt(square);
+    socket.send(JSON.stringify({square: square}));
+}
+
+
+function updateBoard(data) {
+    const board = data.board.split("");
+    board.forEach((v, i) => {
+        document.getElementById("sq" + i).textContent = v !== "-" ? v : "";
+    });
+    document.getElementById("player-display").textContent = "Jugador actual: " + data.active_player;
+    if (data.over) {
+        document.getElementById("winner-text").textContent = "Ganador: " + data.winner;
+    }
+}
+</script>
 {% endblock %}
